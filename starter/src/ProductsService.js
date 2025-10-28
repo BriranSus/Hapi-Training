@@ -6,10 +6,17 @@ class ProductsService {
     this._pool = new Pool();
   }
 
-  /**
- * @TODO 3
- * Define function to save product
- */
+  async addProduct({ name, price, category }) {
+    const id = nanoid(16);
+    const query = {
+      text: 'INSERT INTO products VALUES($1, $2, $3, $4) RETURNING id',
+      values: [id, name, price, category],
+    };
+
+    const result = await this._pool.query(query);
+
+    return id;
+  }
 
   async getAllProducts() {
     const result = await this._pool.query('SELECT * FROM products');
